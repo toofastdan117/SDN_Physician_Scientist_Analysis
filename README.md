@@ -1,4 +1,4 @@
-# SDN_Physician_Scientist_Analysis
+# SDN Physician Scientist Analysis
 
 Analyzing interview, rejection, and acceptance data posted on the SDN physician scientists forum.
 
