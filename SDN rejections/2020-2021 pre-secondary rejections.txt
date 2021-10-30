@@ -1,4 +1,4 @@
 University of Washington: wpneuro (C: 7/26, R: 8/11), Bear08150902 (C: 7/14, R: 7/26), JimmyMacElroy (C: 7/20, R: 8/12), neurofanatic213 (C: 7/24, R: 8/12), supersonic99 (C: 7/21, R: 8/15), gnohmChild (C: 7/14, R: 7/16), DCemt (C: 7/28, R:8/11), scineurd (C: 7/24, R: 7/28), scientistintraining (C: 7/25, R: 8/12), ac_505 (C: 8/24, R: 9/6), wrhen (C: 9/X, R: 9/22)
 University of California San Francisco: dysyurt (C: 9/30, R: 12/3)
 University of Iowa: neurozf5 (C: 8/3, R: 9/22)
-Emory University: neurozf5 (C: 8/3, R, 9/25)
+Emory University: neurozf5 (C: 8/3, R: 9/25)
