@@ -6,7 +6,7 @@ Duke: Lucca (C: 7/x, R: 10/24), PursuingHappy (C: 8/20, R: 11/27), MehKMeh (C: 7
 Albert Einstein: DaGhost (C: 7/20, R: 9/12), Klucket2 (C:7/20, R:9/12), MehKMeh (C:7/6, R:9/12), Atezo (C:7/19, R:10/15), Thoroughbred_med (C: 8/1, R: 10/17), 4lphabet (C: 8/30, R: 10/16), peanutbuttercup24 (C: 8/13, R: 10/22), ExcitatorySynapse (C: 9/26, R: 10/22)
 Emory: peanutbuttercup24 (C: 8/13, R: 2/20), immunoHERstochemistry (C: 8/12, R: 2/20), looptheloop (C: 8/x, R: 2/20), 44sigma (C: 8/16, R: 2/20)
 Georgetown: peanutbuttercup24 (C: 8/13, R: 1/9)
-Harvard: confudidoeskimo (C: 8/x, R: 10/16) Lucca (C: 8/x, R: 10/17), Celme123 (C: 8/x, R: 12/6), pub12 (C: 8/x, R: 3/1), looptheloop (C:8/x, R: 3/1), nakamarra (C: 7/31, R: 3/1)
+Harvard: confudidoeskimo (C: 8/x, R: 10/16), Lucca (C: 8/x, R: 10/17), Celme123 (C: 8/x, R: 12/6), pub12 (C: 8/x, R: 3/1), looptheloop (C:8/x, R: 3/1), nakamarra (C: 7/31, R: 3/1)
 Indiana University: Thoroughbred_Med (C: 8/1, R: 9/14), peanutbuttercup24 (C: 8/13, R: 9/14), LateApplicant2018 (C: 9/30, R: 11/15)
 Johns Hopkins: Celme123 (C: 8/x, R: 9/26), PursuingHappy (C: 8/22, R:9/26), TheJooce (C: 8/21, R: 9/26), looptheloop (C:8/x, R: 9/26), Lucca (C:7/x, R:9/26), Clementine1863 (C: 7/31, R: 9/26), Shmoopdippydoop (C: 8/x, R: 9/26), pubh12 (C: 8/24, R: 9/26), SlythenClaw (C:10/9, R: 12/5)
 Kansas: Thoroughbred_med (C: 8/5, R: 1/17)
