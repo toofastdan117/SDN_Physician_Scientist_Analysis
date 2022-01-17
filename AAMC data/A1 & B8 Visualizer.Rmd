@@ -1,0 +1,189 @@
+---
+title: "AAMC Table A-1 (MD Schools) and Table B-8 (MD/PhD Schools) Visualizer"
+author: "Author: toofastdan"
+date: "Date Modified: 1/16/2022"
+data source: "ijhua on GitHub: https://github.com/ijhua/aamc_admissions"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include=FALSE}
+library(readxl)
+library(writexl)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(plotly)
+```
+
+```{r include=FALSE}
+# Setting the file directory with the excel files created by the python table analyzer
+main_dir <- "C:/Users/TooFastDan/Documents/MD_PhD Application/Python Analysis/AAMC data"
+
+# Importing MD table A-1 information
+md <- read_xlsx(paste0(main_dir, "/AAMC Table A-1 Merged.xlsx"))
+md$degree <- "MD"
+md_totals <- read_xlsx(paste0(main_dir, "/AAMC Table A-1 Totals.xlsx"))
+md_totals$degree <- "MD"
+
+# Importing MD/PhD table B-8 information
+mdphd <- read_xlsx(paste0(main_dir, "/AAMC Table B-8 Merged.xlsx"))
+mdphd$degree <- "MD-PhD"
+mdphd_totals <- read_xlsx(paste0(main_dir, "/AAMC Table B-8 Totals.xlsx"))
+mdphd_totals$degree <- "MD-PhD"
+
+# Merging dataframes to make things easier to graph
+a1b8 <- rbind(md, mdphd) %>% as.data.frame()
+a1b8$degree <- factor(x = a1b8$degree, levels = c("MD", "MD-PhD"))
+a1b8_totals <- rbind(md_totals, mdphd_totals) %>% as.data.frame()
+a1b8_totals$degree <- factor(x = a1b8_totals$degree, levels = c("MD", "MD-PhD"))
+```
+
+
+## Graphing the Number of Total Applications/Applicants/Matriculants
+
+```{r include=FALSE}
+a1b8_totals_apps <- a1b8_totals[ , c(1, 11, 15)]
+a1b8_totals_apps$metric <- "Total Applications"
+colnames(a1b8_totals_apps) <- c("n", "year", "degree", "metric")
+
+a1b8_totals_applicants <- a1b8_totals[ , c(12, 11, 15)]
+a1b8_totals_applicants$metric <- "Applicants"
+colnames(a1b8_totals_applicants) <- c("n", "year", "degree", "metric")
+
+a1b8_totals_matriculants <- a1b8_totals[ , c(6, 11, 15)]
+a1b8_totals_matriculants$metric <- "Matriculants"
+colnames(a1b8_totals_matriculants) <- c("n", "year", "degree", "metric")
+
+a1b8_totals_bulk <- rbind(a1b8_totals_apps, a1b8_totals_applicants, a1b8_totals_matriculants)
+a1b8_totals_bulk$degree_metric <- paste0(a1b8_totals_bulk$degree, ": ", a1b8_totals_bulk$metric)
+a1b8_totals_bulk$degree_metric <- factor(x = a1b8_totals_bulk$degree_metric, levels = c("MD: Total Applications", "MD: Applicants", "MD: Matriculants", "MD-PhD: Total Applications", "MD-PhD: Applicants", "MD-PhD: Matriculants"))
+```
+
+```{r include=FALSE}
+layout_ggplotly <- function(ggplotly_graph, x, y){
+  # Changing the x and y axes positions in a ggplotly graph
+  # The 1 and 2 goes into the list that contains the options for the x and y axis labels respectively
+  ggplotly_graph[['x']][['layout']][['annotations']][[1]][['y']] <- y
+  ggplotly_graph[['x']][['layout']][['annotations']][[2]][['x']] <- x
+  return(ggplotly_graph)
+}
+```
+
+```{r echo=FALSE}
+a1b8_totals_bulk_graph <- a1b8_totals_bulk %>% ggplot(aes(x = year, y = n)) +
+  geom_line() +
+  geom_point() + 
+  facet_wrap(~degree_metric, nrow = 2, ncol = 3, scales = "free_y") +
+  labs(title = "MD and MD/PhD Applicants and Matriculants Over Time", x = "Year", y = "Number") + 
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5))
+#print(a1b8_totals_bulk_graph)
+gp <- ggplotly(a1b8_totals_bulk_graph, width = 1200, height = 700)
+gp <- layout_ggplotly(ggplotly_graph = gp, x = -0.055, y = -0.04)
+gp
+```
+
+
+## Graphing the Applicants & Matriculants Together
+
+```{r echo=FALSE}
+a1b8_totals_bulk2 <- a1b8_totals_bulk[a1b8_totals_bulk$metric!="Total Applications", ]
+a1b8_totals_bulk2$metric <- factor(x = a1b8_totals_bulk2$metric, levels = c("Applicants", "Matriculants"))
+
+a1b8_totals_bulk2_graph <- a1b8_totals_bulk2 %>% ggplot(aes(x = year, y = n, color = metric)) +
+  geom_line() +
+  geom_point() + 
+  facet_wrap(~degree, nrow = 1, ncol = 2, scales = "free_y") +
+  scale_color_manual(values = c("#ff4747", "#7f6ce0")) +
+  labs(title = "MD and MD/PhD Applicants and Matriculants Over Time", x = "Year", y = "Number of Applicants/Matriculants") + 
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5))
+#print(a1b8_totals_bulk2_graph)
+gp <- ggplotly(a1b8_totals_bulk2_graph, width = 1200, height = 550)
+gp <- layout_ggplotly(ggplotly_graph = gp, x = -0.05, y = -0.04)
+gp
+```
+
+MD:  There was a `r round((a1b8_totals[10, 12] - a1b8_totals[9, 12]) / (a1b8_totals[9, 12]) * 100, digits = 1)`% increase in the 2021 cycle, relative to the 2020 cycle.
+
+MD/PhD:  There was a `r round((a1b8_totals[20, 12] - a1b8_totals[19, 12]) / (a1b8_totals[19, 12]) * 100, digits = 1)`% increase in the 2021 cycle, relative to the 2020 cycle.
+
+
+## Graphing in-state and out-of-state percentages over time
+
+```{r echo=FALSE}
+a1b8_totals_state <- tidyr::pivot_longer(data = a1b8_totals, cols = c("in state applicants", "in state matriculants"), names_to = "Application_Status", values_to = "percent_instate")
+a1b8_totals_state$Application_Status <- gsub(pattern = "in state ", replacement = "", x = a1b8_totals_state$Application_Status)
+a1b8_totals_state$Application_Status <- factor(x = a1b8_totals_state$Application_Status, levels = c("applicants", "matriculants"))
+
+a1b8_totals_state_graph <- a1b8_totals_state %>% ggplot(aes(x = cycle_year, y = percent_instate, color = Application_Status)) +
+  geom_line() +
+  geom_point() + 
+  ylim(0, 65) +
+  scale_color_manual(values = c("#ff4747", "#7f6ce0")) +
+  facet_wrap(~degree, nrow = 1, ncol = 2, scales = "fixed") +
+  labs(title = "MD and MD/PhD Percent in-state Over Time", x = "Year", y = "Percent in-state Applicants/Matriculants") + 
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5))
+#print(a1b8_totals_state_graph)
+gp <- ggplotly(a1b8_totals_state_graph, width = 1200, height = 550)
+gp <- layout_ggplotly(ggplotly_graph = gp, x = -0.025, y = -0.04)
+gp
+```
+
+## Graphing percent sex percentages over time
+
+```{r echo=FALSE}
+a1b8_totals_sex <- tidyr::pivot_longer(data = a1b8_totals, cols = c("women applicants", "men applicants", "women matriculants", "men matriculants"), names_to = "Application_Status", values_to = "percent_sex")
+a1b8_totals_sex$Application_Status <- factor(x = a1b8_totals_sex$Application_Status, levels = c("women applicants", "women matriculants", "men applicants", "men matriculants"))
+
+a1b8_totals_sex_graph <- a1b8_totals_sex %>% ggplot(aes(x = cycle_year, y = percent_sex, color = Application_Status)) +
+  geom_line() +
+  geom_point() + 
+  #ylim(0, 65) +
+  scale_color_manual(values = c("#fbadff", "#ff00ee", "#adc8ff", "#000bff")) +
+  facet_wrap(~degree, nrow = 1, ncol = 2, scales = "fixed") +
+  labs(title = "MD and MD/PhD Percent Sex Over Time", x = "Year", y = "Percent Sex Applicants/Matriculants") + 
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5))
+#print(a1b8_totals_sex_graph)
+#ggsave(plot = a1b8_totals_sex_graph, filename = paste0(main_dir, "/percent sex over time.png"), width = 3000, height = 1450, units = "px", dpi = 300)
+gp <- ggplotly(a1b8_totals_sex_graph, width = 1200, height = 550)
+gp <- layout_ggplotly(ggplotly_graph = gp, x = -0.025, y = -0.04)
+gp
+```
+
+## Visalizing my cycle with a line graph
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
